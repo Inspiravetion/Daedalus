@@ -1,0 +1,90 @@
+
+canvas{
+	margin: 0;
+	padding: 0;
+}
+
+#bodyContainer{
+	background-color: #000;
+	display: -webkit-box; display: -moz-box; display: box;
+	-webkit-box-pack: justify;
+	-moz-box-pack: justify;
+	-ms-box-pack: justify;
+	box-pack: justify;
+	-webkit-box-orient: vertical;
+	-moz-box-orient: vertical;
+	-ms-box-orient: vertical;
+	box-orient: vertical;
+	height: 100%;
+	padding: 5;
+	margin: 5;
+}
+
+	#navBar{
+		background-color: #ddd;
+		/*-webkit-box-flex: .1;
+		-moz-box-flex: .1;
+		-ms-box-flex: .1;
+		box-flex: .1;*/
+		padding: 5;
+		margin: 5;
+		display: -webkit-box;
+		-webkit-box-pack: justify;
+	}
+
+		.navElem{
+			color: #fff;
+			background-color: #000;
+			width: 150px;
+			height: 50px;
+			margin: 10px;
+			padding: 5px;
+			text-align: center;
+		}
+
+	#contentContainer{
+		background-color: #fff;
+		display: -webkit-box; display: -moz-box; display: box;
+		-webkit-box-pack: justify;
+		-moz-box-pack: justify;
+		-ms-box-pack: justify;
+		box-pack: justify;
+		-webkit-box-flex: .8;
+		-moz-box-flex: 1;
+		-ms-box-flex: 1;
+		box-flex: 1;
+		padding: 5;
+		margin: 5;
+	}
+
+		#services{
+			background-color: #ddd;
+			-webkit-box-flex: .1;
+			-moz-box-flex: .1;
+			-ms-box-flex: .1;
+			box-flex: .1;
+			height: inherit;
+			padding: 5;
+			margin: 5;
+		}
+
+		#editor{
+			background-color: #ddd;
+			-webkit-box-flex: 1;
+			-moz-box-flex: 1;
+			-ms-box-flex: 1;
+			box-flex: 1;
+			height: inherit;
+			position: relative;
+			margin: 5;
+		}
+
+		#minimap{
+			position: relative;
+			height: inherit;
+			width: 140px;
+			margin: 0px;
+			padding: 0px;
+			margin-top: 5px;
+		}
+
