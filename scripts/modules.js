@@ -84,8 +84,11 @@ window.onload = function(){
 
 	em.factory('MiniMap', function(){
 
-		var self     = this;
+		var self     = this,
+		editorWindow,
+		scrBoxHeight;
 		self.minimap = ace.edit('minimap');
+		
 		
 		//Make Scroll Over Track
 		var mapDiv   = document.getElementById('minimap'),
@@ -131,15 +134,13 @@ window.onload = function(){
 
 		function updateScrollOver(event){
 			if(down && event.clientY >= scrollOver.offsetTop){
-				//TODO: offsety and clienty get less and less acurate
-				//the farther away from 0,0 you get
-				//make click in the middle of the scrollbox
 				//disable left-right scrolling on minimap
 				//bind scrolling for both minimap and editor
 				var line = (event.offsetY/(self.minimap.renderer.$textLayer
 					.$characterSize.height));
-				scrollBox.style.top = event.clientY+10;
-				self.Editor.editor.scrollToLine(line, false, true);
+				//TODO: figure out why I have to add this 10...padding?...margin?
+				scrollBox.style.top = (event.clientY+10) - (scrBoxHeight/2);
+				self.Editor.editor.scrollToLine(line, true, true);
 				//self.Editor.editor.scrollToRow(((event.offsetY)/3)-10);
 				//self.minimap.scrollToRow(((event.offsetY)/3)-10);
 
@@ -152,8 +153,8 @@ window.onload = function(){
 
 			var theme    = self.Editor.editor.getTheme(),
 			edCharSize   = self.Editor.editor.renderer.$textLayer.$characterSize.height, //in pixels
-			miniCharSize = self.minimap.renderer.$textLayer.$characterSize.height, //in pixels
-			editorWindow = document.getElementById('editor').offsetHeight,
+			miniCharSize = self.minimap.renderer.$textLayer.$characterSize.height; //in pixels
+			editorWindow = document.getElementById('editor').offsetHeight;
 			scrBoxHeight = ((editorWindow / edCharSize) * miniCharSize);
 
 			scrollBox.style.height   = scrBoxHeight + 'px';
