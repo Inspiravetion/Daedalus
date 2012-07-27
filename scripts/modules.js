@@ -84,7 +84,7 @@ window.onload = function(){
 
 	em.factory('MiniMap', function(){
 
-		var self = this;
+		var self     = this;
 		self.minimap = ace.edit('minimap');
 		
 		//Make Scroll Over Track
@@ -105,7 +105,6 @@ window.onload = function(){
 		var scrollBox            = document.createElement('canvas'),
 		context                  = scrollBox.getContext('2d');
 		scrollBox.style.width    = mapDiv.offsetWidth + 'px';
-		scrollBox.style.height   = '152px';
 		scrollBox.style.top      = scrollOver.style.top;
 		scrollBox.style.left     = scrollOver.style.left;
 		scrollBox.style.position = 'absolute';
@@ -139,8 +138,8 @@ window.onload = function(){
 				//bind scrolling for both minimap and editor
 				var line = (event.offsetY/(self.minimap.renderer.$textLayer
 					.$characterSize.height));
-				scrollBox.style.top = event.clientY;
-				self.Editor.editor.scrollToLine(line, true, true);
+				scrollBox.style.top = event.clientY+10;
+				self.Editor.editor.scrollToLine(line, false, true);
 				//self.Editor.editor.scrollToRow(((event.offsetY)/3)-10);
 				//self.minimap.scrollToRow(((event.offsetY)/3)-10);
 
@@ -148,23 +147,30 @@ window.onload = function(){
 		};
 
 		this.config = function(editor){
-			self.Editor = editor;
-			var theme    = self.Editor.editor.getTheme(); 
-			self.minimap.setTheme(theme);
+			self.Editor  = editor;
 			self.minimap.setFontSize(3);
+
+			var theme    = self.Editor.editor.getTheme(),
+			edCharSize   = self.Editor.editor.renderer.$textLayer.$characterSize.height, //in pixels
+			miniCharSize = self.minimap.renderer.$textLayer.$characterSize.height, //in pixels
+			editorWindow = document.getElementById('editor').offsetHeight,
+			scrBoxHeight = ((editorWindow / edCharSize) * miniCharSize);
+
+			scrollBox.style.height   = scrBoxHeight + 'px';
+			self.minimap.setTheme(theme);
 			self.minimap.setHighlightActiveLine(false);
 			self.minimap.renderer.setShowGutter(false);
 			updateMiniText();
+
 			//update minimap when the content of the editor changes
 			self.Editor.editor.getSession().on('change', function(e){
 				updateMiniText();
 			});
+
 			//scrolls the minimap to the position of the editor as it scrolls
 			self.Editor.editor.on('scrollTopChange', function(){
-				var editorLine = ((this.session.$scrollTop)/
-					(this.renderer.$textLayer.$characterSize.height));
-				var minimapTop = (editorLine * self.minimap.renderer.$textLayer
-					.$characterSize.height);
+				var editorLine = ((this.session.$scrollTop)/(edCharSize));
+				var minimapTop = (editorLine * miniCharSize);
 				self.minimap.session.setScrollTop(minimapTop);
 			});
 			console.log('finished minimap initialization');
