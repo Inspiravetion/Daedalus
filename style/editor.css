@@ -5,7 +5,7 @@ canvas{
 }
 
 #bodyContainer{
-	background-color: #000;
+	background-color: #ccc;
 	display: -webkit-box; display: -moz-box; display: box;
 	-webkit-box-pack: justify;
 	-moz-box-pack: justify;
@@ -21,7 +21,7 @@ canvas{
 }
 
 	#navBar{
-		background-color: #ddd;
+		background-color: #fff;
 		/*-webkit-box-flex: .1;
 		-moz-box-flex: .1;
 		-ms-box-flex: .1;
@@ -34,7 +34,7 @@ canvas{
 
 		.navElem{
 			color: #fff;
-			background-color: #000;
+			background-color: #ccc;
 			width: 150px;
 			height: 50px;
 			margin: 10px;

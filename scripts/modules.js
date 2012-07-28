@@ -132,18 +132,32 @@ window.onload = function(){
 			down = false;
 		}
 
+
+		/*
+		 * To deal with files longer than the minimap, slowely scroll the minimap as you go up and
+		 * down and take into account the minimap.session.$scrollTop for your calculations scrolling the editor
+		 */
 		function updateScrollOver(event){
-			if(down && event.clientY >= scrollOver.offsetTop){
-				//disable left-right scrolling on minimap
+			var newScrBoxTop = (event.clientY+10) - (scrBoxHeight/2),
+			isUnderTop       = (newScrBoxTop >= scrollOver.offsetTop),
+			newScrBoxBottom  = (event.clientY+10) + (scrBoxHeight/2),
+			isOverBottom     = (newScrBoxBottom <= (scrollOver.offsetTop+scrollOver.offsetHeight));
+			if(down && isUnderTop && isOverBottom){
 				//bind scrolling for both minimap and editor
-				var line = (event.offsetY/(self.minimap.renderer.$textLayer
+				var line = (((event.clientY+10) - scrollOver.offsetTop)/(self.minimap.renderer.$textLayer
 					.$characterSize.height));
 				//TODO: figure out why I have to add this 10...padding?...margin?
-				scrollBox.style.top = (event.clientY+10) - (scrBoxHeight/2);
-				self.Editor.editor.scrollToLine(line, true, true);
-				//self.Editor.editor.scrollToRow(((event.offsetY)/3)-10);
-				//self.minimap.scrollToRow(((event.offsetY)/3)-10);
+				scrollBox.style.top = (newScrBoxTop);
+				self.Editor.editor.scrollToLine(line, true, false);
+			}
+			else if(down && isUnderTop){
+				scrollBox.style.top = scrollOver.offsetTop + scrollOver.offsetHeight - scrollBox.offsetHeight;
+				self.Editor.editor.scrollToLine(self.Editor.editor.session.getLength(), true, false);
 
+			}
+			else if(down && isOverBottom){
+				scrollBox.style.top = scrollOver.offsetTop;
+				self.Editor.editor.scrollToLine(1, true, false);
 			}
 		};
 
@@ -169,12 +183,13 @@ window.onload = function(){
 			});
 
 			//scrolls the minimap to the position of the editor as it scrolls
+			/*
 			self.Editor.editor.on('scrollTopChange', function(){
 				var editorLine = ((this.session.$scrollTop)/(edCharSize));
 				var minimapTop = (editorLine * miniCharSize);
 				self.minimap.session.setScrollTop(minimapTop);
 			});
-			console.log('finished minimap initialization');
+			console.log('finished minimap initialization');*/
 		};
 
 		function updateMiniText(){
