@@ -11171,6 +11171,7 @@ var VirtualRenderer = function(container, theme) {
     this.scrollBar.addEventListener("scroll", function(e) {
         if (!_self.$inScrollAnimation)
             _self.session.setScrollTop(e.data);
+            console.log('CHARLIE LIPFORD: first scroll test');
     });
 
     this.scrollTop = 0;
@@ -11180,6 +11181,7 @@ var VirtualRenderer = function(container, theme) {
         var scrollLeft = _self.scroller.scrollLeft;
         _self.scrollLeft = scrollLeft;
         _self.session.setScrollLeft(scrollLeft);
+        console.log('CHARLIE LIPFORD: second scroll test');
     });
 
     this.cursorPos = {

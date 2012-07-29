@@ -5,7 +5,7 @@ window.onload = function(){
 //Controllers
 
 	editorCtrl = function($scope, Editor, MiniMap, Find, GoogleDrive, GoogleSearch, Git) {
-	        
+	    
 	    $scope.find = function(){
 	        Find.find($scope.someText);
 	    };
@@ -143,7 +143,7 @@ window.onload = function(){
 			newScrBoxBottom  = (event.clientY+10) + (scrBoxHeight/2),
 			isOverBottom     = (newScrBoxBottom <= (scrollOver.offsetTop+scrollOver.offsetHeight));
 			if(down && isUnderTop && isOverBottom){
-				//bind scrolling for both minimap and editor
+				//TODO: take into account minimap.session.$scrollTop for clicks on the minimap
 				var line = (((event.clientY+10) - scrollOver.offsetTop)/(self.minimap.renderer.$textLayer
 					.$characterSize.height));
 				//TODO: figure out why I have to add this 10...padding?...margin?
@@ -183,20 +183,25 @@ window.onload = function(){
 			});
 
 			//scrolls the minimap to the position of the editor as it scrolls
-			/*
-			self.Editor.editor.on('scrollTopChange', function(){
-				var editorLine = ((this.session.$scrollTop)/(edCharSize));
-				var minimapTop = (editorLine * miniCharSize);
-				self.minimap.session.setScrollTop(minimapTop);
+			self.Editor.editor.renderer.scrollBar.addEventListener('scroll', function(event){
+				//scrolls the actual minimap down as the page scrolls
+				var editorLine  = ((event.data)/(edCharSize));
+				self.minimap.scrollToLine(editorLine, true, false);
+				//scrolls the scrollbox over the right portion of the minimap 
+				//****NOT QUITE RIGHT***
+				var miniScrollPix   = self.minimap.session.$scrollTop,
+				scrBoxTopPix        = (editorLine * miniCharSize) + scrollOver.offsetTop;
+				scrollBox.style.top = scrBoxTopPix - (miniScrollPix);
 			});
-			console.log('finished minimap initialization');*/
+
+			console.log(self.Editor.editor.renderer.scrollBar._eventRegistry);
 		};
 
 		function updateMiniText(){
 			var doc  = self.Editor.editor.getSession().getValue();
 		    self.minimap.getSession().setValue(doc);
 		};
-		
+
 		return this;
 	});
 

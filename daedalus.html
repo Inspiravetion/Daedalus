@@ -5,9 +5,9 @@
 		<script type="text/javascript" src='scripts/ace/src/ace.js'></script>
 		<script type='text/javascript' src='scripts/ace/src/theme-github.js'></script>
 		<script type="text/javascript" src='scripts/ace/src/mode-javascript.js'></script>
-	    <script type="text/javascript" src='scripts/modules.js'></script>  
+	    <script type="text/javascript" src='scripts/daedalusClient.js'></script>  
 	<!--	<script type="text/javascript" src='editorCtrl.js'></script> -->
-		<link rel="stylesheet" href="style/editor.css" />		
+		<link rel="stylesheet" href="style/daedalus.css" />		
 	</head>
 	<body>
 		<div id="bodyContainer">
@@ -24,7 +24,7 @@
 					<button id='findButton' ng-click='find()'>Find</button>
 					<button id='findNextButton' ng-click='findNext()'>Find Next</button><br/>
 					<button id='apis' ng-click='tryAPIs()'>APIs</button>
-
+					<p>{{scroll}}</p>
 				</div>
 				<div id="editor">Editor</div>
 				<div id='minimap'></div>
