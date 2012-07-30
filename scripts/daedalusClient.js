@@ -10,14 +10,16 @@ window.onload = function(){
 	        Find.find($scope.someText);
 	    };
 
-	    $scope.findNext = function(){
-	    	Find.findNext();
+	    $scope.myRepos = function(){
+	    	//Find.findNext();
+	    	socket.emit('myRepos');
 	    };
 
-	    $scope.tryAPIs = function(){
-	    	GoogleDrive.drive();
-	    	GoogleSearch.search();
-	    	Git.git();
+	    $scope.gitLogin = function(){
+	    	socket.emit('logIn', {
+	    		username: 'inspiravetion',
+	    		password: 'password'
+	    	});
 	    };
 
 	    MiniMap.config(Editor);
@@ -26,6 +28,20 @@ window.onload = function(){
 	    Editor.editor.getSession().setValue('');
 	    Editor.editor.getSession().setMode('ace/mode/javascript');
 	    MiniMap.minimap.getSession().setMode('ace/mode/javascript');
+
+	    var socket = io.connect('http://192.168.125.101:8000');
+
+	    socket.on('display', function(msg){
+	    	var str = '';
+	    	for(prop in msg[0]){
+	    		str += (prop + ': ' + msg[0][prop] + '\n');
+	    	}
+	    	var str2 = eval(msg[0]);
+	    	console.log(eval(msg));
+	    	Editor.editor.insert(str2.full_name);
+	    });
+
+	    Editor.editor.insert('is this at least working?');
 	    
 	};
 
@@ -139,12 +155,12 @@ window.onload = function(){
 		 */
 		function updateScrollOver(event){
 			var newScrBoxTop = (event.clientY+10) - (scrBoxHeight/2),
-			isUnderTop       = (newScrBoxTop >= scrollOver.offsetTop),
+			isUnderTop       = ((newScrBoxTop + self.minimap.session.$scrollTop) >= scrollOver.offsetTop),
 			newScrBoxBottom  = (event.clientY+10) + (scrBoxHeight/2),
-			isOverBottom     = (newScrBoxBottom <= (scrollOver.offsetTop+scrollOver.offsetHeight));
+			isOverBottom     = ((newScrBoxBottom + self.minimap.session.$scrollTop) <= (scrollOver.offsetTop+scrollOver.offsetHeight));
 			if(down && isUnderTop && isOverBottom){
 				//TODO: take into account minimap.session.$scrollTop for clicks on the minimap
-				var line = (((event.clientY+10) - scrollOver.offsetTop)/(self.minimap.renderer.$textLayer
+				var line = (((event.clientY+10) - scrollOver.offsetTop + self.minimap.session.$scrollTop)/(self.minimap.renderer.$textLayer
 					.$characterSize.height));
 				//TODO: figure out why I have to add this 10...padding?...margin?
 				scrollBox.style.top = (newScrBoxTop);
@@ -188,7 +204,7 @@ window.onload = function(){
 				var editorLine  = ((event.data)/(edCharSize));
 				self.minimap.scrollToLine(editorLine, true, false);
 				//scrolls the scrollbox over the right portion of the minimap 
-				//****NOT QUITE RIGHT***
+				//****NOT QUITE RIGHT***...stops scrolling once the minimap stops scrolling
 				var miniScrollPix   = self.minimap.session.$scrollTop,
 				scrBoxTopPix        = (editorLine * miniCharSize) + scrollOver.offsetTop;
 				scrollBox.style.top = scrBoxTopPix - (miniScrollPix);

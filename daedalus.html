@@ -1,13 +1,14 @@
 <!DOCTYPE>
 <html ng-app>
 	<head>
-		<script type="text/javascript" src='scripts/angular/angular.js'></script>
-		<script type="text/javascript" src='scripts/ace/src/ace.js'></script>
-		<script type='text/javascript' src='scripts/ace/src/theme-github.js'></script>
-		<script type="text/javascript" src='scripts/ace/src/mode-javascript.js'></script>
-	    <script type="text/javascript" src='scripts/daedalusClient.js'></script>  
+		<script type="text/javascript" src='socket.io/socket.io.js'></script>
+		<script type="text/javascript" src='/angular.js'></script>
+		<script type="text/javascript" src='/ace.js'></script>
+		<script type='text/javascript' src='/theme-github.js'></script>
+		<script type="text/javascript" src='/mode-javascript.js'></script>
+	    <script type="text/javascript" src='/daedalusClient.js'></script>  
 	<!--	<script type="text/javascript" src='editorCtrl.js'></script> -->
-		<link rel="stylesheet" href="style/daedalus.css" />		
+		<link rel="stylesheet" href="/daedalus.css" />		
 	</head>
 	<body>
 		<div id="bodyContainer">
@@ -22,8 +23,8 @@
 				<div id="services" ng-controller='editorCtrl'>
 					<input type='text' id='searchText' ng-model='someText'/><br/>
 					<button id='findButton' ng-click='find()'>Find</button>
-					<button id='findNextButton' ng-click='findNext()'>Find Next</button><br/>
-					<button id='apis' ng-click='tryAPIs()'>APIs</button>
+					<button id='findNextButton' ng-click='myRepos()'>Find Next</button><br/>
+					<button id='apis' ng-click='gitLogin()'>APIs</button>
 					<p>{{scroll}}</p>
 				</div>
 				<div id="editor">Editor</div>
