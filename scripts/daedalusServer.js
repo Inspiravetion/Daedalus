@@ -50,6 +50,7 @@ services = [
 	{'identifier': '/theme-github.js'      ,'service': githubTheme       ,'mimeType': 'text/javascript' },
 	{'identifier': '/mode-javascript.js'   ,'service': modeJS            ,'mimeType': 'text/javascript' },
 	{'identifier': '/worker-javascript.js' ,'service': jsWorkerJS        ,'mimeType': 'text/javascript' },
+	{'identifier': '/DaedaGit.js'          ,'service': daedaGitJS        ,'mimeType': 'text/javascript' },
 	{'identifier': '/daedalus.css'         ,'service': daedalusCSS       ,'mimeType': 'text/css'        }
 ];
 
@@ -90,6 +91,11 @@ function daedalusCSS () {
 
 function jsWorkerJS () {
 	var output = fs.readFileSync(__dirname + '/ace/src/worker-javascript.js');
+	return output;
+}
+
+function daedaGitJS () {
+	var output = fs.readFileSync(__dirname + '/DaedaGit/DaedaGit.js');
 	return output;
 }
 
