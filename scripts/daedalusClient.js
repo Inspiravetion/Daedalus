@@ -16,10 +16,7 @@ window.onload = function(){
 	    };
 
 	    $scope.gitLogin = function(){
-	    	socket.emit('logIn', {
-	    		username: 'inspiravetion',
-	    		password: 'password'
-	    	});
+			DaedaGit.authenticate(['repo'], '123');
 	    };
 
 	    MiniMap.config(Editor);
@@ -38,7 +35,7 @@ window.onload = function(){
 	    	}
 	    	var str2 = eval(msg[0]);
 	    	console.log(eval(msg));
-	    	Editor.editor.insert(str2.full_name);
+	    	Editor.editor.insert(str);
 	    });
 
 	    Editor.editor.insert('is this at least working?');

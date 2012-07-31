@@ -13,7 +13,8 @@ var http         = require('http'),
 function reqHandler(req, res) {
     var request = url.parse(req.url, true),
         action  = request.pathname,
-        output  = processAction(action);
+        query   = request.query,
+        output  = processAction(action, query);
     if (output) {
     	res.writeHead(200, 
     		{
@@ -30,11 +31,11 @@ function reqHandler(req, res) {
     }    
 }
 
-function processAction(action){
+function processAction(action, query){
 	console.log('Processing action...')
 	for (var i = 0; i < services.length; i++) {	
 		if (action == services[i].identifier) {
-	        var data = services[i].service(),
+	        var data = services[i].service(query),
 	        type     = services[i].mimeType;
 	        return {'data': data, 'mimeType': type};
 	    }
@@ -51,6 +52,7 @@ services = [
 	{'identifier': '/mode-javascript.js'   ,'service': modeJS            ,'mimeType': 'text/javascript' },
 	{'identifier': '/worker-javascript.js' ,'service': jsWorkerJS        ,'mimeType': 'text/javascript' },
 	{'identifier': '/DaedaGit.js'          ,'service': daedaGitJS        ,'mimeType': 'text/javascript' },
+	{'identifier': '/git_autho_redirect'   ,'service': authoRedirect     ,'mimeType': 'text/javascript' }, //not sure about this mime type
 	{'identifier': '/daedalus.css'         ,'service': daedalusCSS       ,'mimeType': 'text/css'        }
 ];
 
@@ -97,6 +99,32 @@ function jsWorkerJS () {
 function daedaGitJS () {
 	var output = fs.readFileSync(__dirname + '/DaedaGit/DaedaGit.js');
 	return output;
+}
+
+function authoRedirect (queryObj) {
+	console.log(queryObj);
+	var code = 'code=' + queryObj.code,
+	cid      = '&client_id=157454992955c2d49a14',
+	secret   = '&client_secret=dad6c5683a00de3cf17cf2a76786a2295baed94',
+	state    = '&state=' + queryObj.state,
+	path     = '/login/oauth/access_token?' + code + cid + secret + state,
+	headers  = {
+		Accept           : 'application/json',
+		'Content-Length' : 0
+	},
+	options  = {
+		host      : 'www.github.com',
+		'path'    : path,
+		port      : 80,
+		method    : 'POST',
+		'headers' : headers
+	},
+	request  = http.request(options, function(res){
+		res.on('data', function(data){
+			console.log(data);
+		});
+	});
+	request.end();
 }
 
 
